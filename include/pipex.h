@@ -6,7 +6,7 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 08:15:48 by agraille          #+#    #+#             */
-/*   Updated: 2025/01/02 11:37:54 by agraille         ###   ########.fr       */
+/*   Updated: 2025/01/07 10:54:35 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,5 +15,9 @@
 
 # include "../libft/include/libft.h"
 # include "../printf/include/ft_printf.h"
+# include <fcntl.h>
+
+char	**path_split(char **envp);
+void	ft_free(char **path);
 
 #endif

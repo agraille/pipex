@@ -6,7 +6,7 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 08:14:58 by agraille          #+#    #+#             */
-/*   Updated: 2025/01/07 10:49:38 by agraille         ###   ########.fr       */
+/*   Updated: 2025/01/07 12:06:29 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ int	main(int argc, char **argv, char **envp)
 	argc++;
 	argv++;
 	path = path_split(envp);
+	argv_is_valid(argv);
 	ft_free(path);
 	return (0);
 }

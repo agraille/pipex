@@ -6,7 +6,7 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 09:13:05 by agraille          #+#    #+#             */
-/*   Updated: 2025/01/07 12:50:12 by agraille         ###   ########.fr       */
+/*   Updated: 2025/01/08 08:48:48 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,23 +29,29 @@ char	**path_split(char **envp)
 		++i;
 	}
 	ft_memmove(path[0], path[0] + 5, ft_strlen(path[0]) - 4);
-	for (int j = 0; path[j]; j++)
-		ft_printf(" %d = %s\n",j, path[j]);
 	return (path);
 }
 
-static int	check_acces(char *check, int i)
+static int	check_open(char *check)
 {
-	if(i % 2 == 0)
-	{
-		acces(check, W_OK);
-		acces(check, R_OK);
-	}
-	else
-	{
-		acces(check, X_OK);
-	}
-	return (0);
+	int	fd;
+
+	fd = open(check, O_TRUNC, O_WRONLY, O_RDONLY);
+		if (!fd)
+		{
+			perror("Erreur lors de l'ouverture du fichier");
+			return(0);
+		}
+	close (fd);
+	return (1);
+}
+
+static int	check_acces(char *check)
+{
+	if(access(check, X_OK) == 0)
+		return (1);
+	perror("Erreur lors de l'acces a la commande");
+	return (-1);
 }
 
 int	argv_is_valid(char **argv)
@@ -53,13 +59,23 @@ int	argv_is_valid(char **argv)
 	int	i;
 
 	i = 3;
-	if (!check_acces(argv[1], 2))
+	if (!check_open(argv[1]) || !argv[1])
 		exit(EXIT_FAILURE);
-	if (!check_acces(argv[2], 1))
+	if (!check_acces(argv[2]) || !argv[2])
 		exit(EXIT_FAILURE);
 	while (argv[i])
 	{
-	if (!check_acces(argv[2], i))
-		exit(EXIT_FAILURE);
+		if (i % 2 != 0)
+		{
+			if (!check_acces(argv[i]))
+				exit(EXIT_FAILURE);
+			ft_printf("i = %d",i);
+		}
+		else
+			if (!check_open(argv[i]))
+				exit(EXIT_FAILURE);
+			
+		i++;
 	}
+	return (0);
 }

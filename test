@@ -1,0 +1,10 @@
+include
+libft
+Makefile
+obj
+pipex
+printf
+src
+test
+test2
+test8

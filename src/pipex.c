@@ -6,7 +6,7 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 09:13:05 by agraille          #+#    #+#             */
-/*   Updated: 2025/01/08 08:48:48 by agraille         ###   ########.fr       */
+/*   Updated: 2025/01/09 13:25:10 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,46 +36,61 @@ static int	check_open(char *check)
 {
 	int	fd;
 
-	fd = open(check, O_TRUNC, O_WRONLY, O_RDONLY);
+	fd = open(check, O_RDWR | O_CREAT | O_TRUNC, 0644);
 		if (!fd)
 		{
 			perror("Erreur lors de l'ouverture du fichier");
 			return(0);
 		}
-	close (fd);
-	return (1);
+	return (fd);
 }
 
-static int	check_acces(char *check)
+static int	check_acces(char *check, char **path)
 {
-	if(access(check, X_OK) == 0)
-		return (1);
+	int		len;
+	int		i;
+	char	*temp;
+	char	*temp2;
+	
+	len = 0;
+	i = 0;
+	while (path[i])
+	{
+		temp2 = ft_strjoin("/", check);
+		temp = ft_strjoin(path[i], temp2);
+		if	(access(temp, X_OK) == 0)
+		{
+			free(temp);
+			free(temp2);
+			exec_cmd(check, path[i]);
+			return (1);
+		}
+		free(temp);
+		free(temp2);
+		i++;
+	}
 	perror("Erreur lors de l'acces a la commande");
 	return (-1);
 }
 
-int	argv_is_valid(char **argv)
+int	argv_is_valid(char **argv, char **path)
 {
 	int	i;
+	int	infile;
 
 	i = 3;
-	if (!check_open(argv[1]) || !argv[1])
-		exit(EXIT_FAILURE);
-	if (!check_acces(argv[2]) || !argv[2])
-		exit(EXIT_FAILURE);
+	infile = open(argv[1], O_RDONLY);
+	if (!infile)
+		infile = check_open(argv[1]);
+	if (!dup2(infile,STDIN_FILENO));
+		return (1);
+	close(infile);
 	while (argv[i])
 	{
-		if (i % 2 != 0)
-		{
-			if (!check_acces(argv[i]))
-				exit(EXIT_FAILURE);
-			ft_printf("i = %d",i);
-		}
-		else
-			if (!check_open(argv[i]))
-				exit(EXIT_FAILURE);
-			
+		if (!check_acces(argv[i], path))
+			return (write(1, "ACCES KO\n", 9));
 		i++;
 	}
+	check_open(argv[i]);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 08:14:58 by agraille          #+#    #+#             */
-/*   Updated: 2025/01/08 08:47:23 by agraille         ###   ########.fr       */
+/*   Updated: 2025/01/09 08:26:54 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,9 @@ int	main(int argc, char **argv, char **envp)
 		exit(EXIT_FAILURE);
 		
 	path = path_split(envp);
-	argv_is_valid(argv);
+	argv_is_valid(argv, path);
+	// if (fd != -1)
+	// 	close (fd); CLOSE TOUT LES FD A LA FIN DU PROGRAMME
 	ft_free(path);
 	return (0);
 }

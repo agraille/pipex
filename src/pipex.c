@@ -6,7 +6,7 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 09:13:05 by agraille          #+#    #+#             */
-/*   Updated: 2025/01/09 13:25:10 by agraille         ###   ########.fr       */
+/*   Updated: 2025/01/10 12:10:42 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,36 +40,32 @@ static int	check_open(char *check)
 		if (!fd)
 		{
 			perror("Erreur lors de l'ouverture du fichier");
-			return(0);
+			return(-1);
 		}
 	return (fd);
 }
 
-static int	check_acces(char *check, char **path)
+static int	check_acces(char *argv, char **path)
 {
-	int		len;
 	int		i;
 	char	*temp;
 	char	*temp2;
 	
-	len = 0;
 	i = 0;
 	while (path[i])
 	{
-		temp2 = ft_strjoin("/", check);
+		temp2 = ft_strjoin("/", argv);
 		temp = ft_strjoin(path[i], temp2);
-		if	(access(temp, X_OK) == 0)
+		free(temp2);
+		if	(access(temp, F_OK | X_OK) == 0)
 		{
 			free(temp);
-			free(temp2);
-			exec_cmd(check, path[i]);
+			exec_cmd(argv, path[i]);
 			return (1);
 		}
 		free(temp);
-		free(temp2);
 		i++;
 	}
-	perror("Erreur lors de l'acces a la commande");
 	return (-1);
 }
 
@@ -82,15 +78,15 @@ int	argv_is_valid(char **argv, char **path)
 	infile = open(argv[1], O_RDONLY);
 	if (!infile)
 		infile = check_open(argv[1]);
-	if (!dup2(infile,STDIN_FILENO));
+	if (dup2(infile,STDIN_FILENO) == -1)
 		return (1);
 	close(infile);
 	while (argv[i])
 	{
 		if (!check_acces(argv[i], path))
-			return (write(1, "ACCES KO\n", 9));
+			write(2, "ACCES KO\n", 9);
 		i++;
 	}
-	check_open(argv[i]);
+	check_open(argv[i - 1]);
 	return (0);
 }

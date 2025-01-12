@@ -1,15 +1,1 @@
-.
-..
-.git
-Makefile
-error
-include
-infile
-libft
-obj
-outfile
-pipex
-printf
-src
-test.c
-valgrind_output.txt
+1

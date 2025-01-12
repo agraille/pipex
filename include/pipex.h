@@ -6,7 +6,7 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 08:15:48 by agraille          #+#    #+#             */
-/*   Updated: 2025/01/12 01:26:27 by agraille         ###   ########.fr       */
+/*   Updated: 2025/01/12 23:05:32 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,14 @@
 # include <stdlib.h>
 # include <sys/wait.h>
 
-
 char	**path_split(char **envp);
 void	ft_free(char **path);
 void	run_pipex(char **argv, char **path, int argc);
-void	pipe_time(char *check, char **way);
-void	exec(char *cmd, char **env);
+int		pipe_time(char *check, char **way, int outfile);
+void	exec(char *cmd, char **env, int outfile);
+void	to_outfile(int outfile, char *cmd, char **path);
 char	*check_acces(char *cmd, char **path);
-
+void	here_in(char **argv, int *p_fd);
+void	here_doc(char **av);
 
 #endif

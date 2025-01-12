@@ -6,7 +6,7 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 09:13:05 by agraille          #+#    #+#             */
-/*   Updated: 2025/01/12 01:50:50 by agraille         ###   ########.fr       */
+/*   Updated: 2025/01/12 13:27:09 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,50 +60,53 @@ static int	open_fd(char *cmd, int in_out)
 char	*check_acces(char *cmd, char **path)
 {
 	int		i;
-	int		j;
 	char	*temp;
 	char	*temp2;
 	
 	i = 0;
-	j = 0;
+	temp2 = ft_strjoin("/",cmd);
 	while (path[i])
 	{
-		temp2 = ft_strjoin("/",cmd);
-		while (temp2[j] != ' ' && temp2[j])
-			j++;
-		temp2[j] = '\0';
 		temp = ft_strjoin(path[i], temp2);
-		free(temp2);
 		if	(access(temp, F_OK | X_OK) == 0)
 		{
+			free(temp2);
 			return (temp);
-			free(temp);
 		}
+		free(temp);
 		i++;
 	}
-	free(temp);
+	free(temp2);
 	return (NULL);
 }
 
-void	run_pipex(char **cmd, char **path, int argc)
+void run_pipex(char **cmd, char **path, int argc)
 {
-	int	i;
-	int	infile;
-	int	outfile;
+    int i;
+    int infile;
+    int outfile;
+    pid_t last_pid;
 
-	i = 2;
-	infile = open_fd(cmd[1], 0);
-	outfile = open_fd(cmd[argc - 1], 1);
-	if (!outfile)
-	{
-		close(infile);
-		exit(EXIT_FAILURE);
-	}
-	dup2(infile,STDIN_FILENO);
-	while (i < argc - 2)
-		pipe_time(cmd[i++], path);
-	dup2(outfile,STDOUT_FILENO);
-	exec(cmd[i], path);
-	close(infile);
-	close(outfile);
+    i = 2;
+    infile = open_fd(cmd[1], 0);
+    outfile = open_fd(cmd[argc - 1], 1);
+    if (!outfile)
+    {
+        close(infile);
+        exit(EXIT_FAILURE);
+    }
+    dup2(infile, STDIN_FILENO);
+    while (i < argc - 2)
+        pipe_time(cmd[i++], path);
+    dup2(outfile, STDOUT_FILENO);
+    
+    last_pid = fork();
+    if (last_pid == 0)
+    {
+        exec(cmd[i], path);
+        exit(1);
+    }
+    waitpid(last_pid, NULL, 0);
+    close(infile);
+    close(outfile);
 }

@@ -6,7 +6,7 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 08:14:58 by agraille          #+#    #+#             */
-/*   Updated: 2025/01/10 11:13:10 by agraille         ###   ########.fr       */
+/*   Updated: 2025/01/11 21:56:08 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	main(int argc, char **argv, char **envp)
 		exit(EXIT_FAILURE); //prevoir un message derreur 
 		
 	path = path_split(envp);
-	argv_is_valid(argv, path);
+	run_pipex(argv, path, argc);
 	// if (fd != -1)
 	// 	close (fd); CLOSE TOUT LES FD A LA FIN DU PROGRAMME
 	ft_free(path);

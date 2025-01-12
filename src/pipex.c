@@ -6,7 +6,7 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 09:13:05 by agraille          #+#    #+#             */
-/*   Updated: 2025/01/10 12:10:42 by agraille         ###   ########.fr       */
+/*   Updated: 2025/01/12 01:50:50 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,61 +32,78 @@ char	**path_split(char **envp)
 	return (path);
 }
 
-static int	check_open(char *check)
+static int	open_fd(char *cmd, int in_out)
 {
 	int	fd;
 
-	fd = open(check, O_RDWR | O_CREAT | O_TRUNC, 0644);
+	if (in_out == 0)
+	{
+		fd = open(cmd, O_RDONLY, 0777);
 		if (!fd)
 		{
-			perror("Erreur lors de l'ouverture du fichier");
-			return(-1);
+			perror("FD");
+			exit(EXIT_FAILURE);
 		}
+	}
+	if (in_out == 1)
+	{
+		fd = open(cmd, O_WRONLY | O_TRUNC | O_CREAT, 0777);
+			if (!fd)
+			{
+				perror("FD");
+				exit(EXIT_FAILURE); //gerer erreur
+			}
+	}
 	return (fd);
 }
 
-static int	check_acces(char *argv, char **path)
+char	*check_acces(char *cmd, char **path)
 {
 	int		i;
+	int		j;
 	char	*temp;
 	char	*temp2;
 	
 	i = 0;
+	j = 0;
 	while (path[i])
 	{
-		temp2 = ft_strjoin("/", argv);
+		temp2 = ft_strjoin("/",cmd);
+		while (temp2[j] != ' ' && temp2[j])
+			j++;
+		temp2[j] = '\0';
 		temp = ft_strjoin(path[i], temp2);
 		free(temp2);
 		if	(access(temp, F_OK | X_OK) == 0)
 		{
+			return (temp);
 			free(temp);
-			exec_cmd(argv, path[i]);
-			return (1);
 		}
-		free(temp);
 		i++;
 	}
-	return (-1);
+	free(temp);
+	return (NULL);
 }
 
-int	argv_is_valid(char **argv, char **path)
+void	run_pipex(char **cmd, char **path, int argc)
 {
 	int	i;
 	int	infile;
+	int	outfile;
 
-	i = 3;
-	infile = open(argv[1], O_RDONLY);
-	if (!infile)
-		infile = check_open(argv[1]);
-	if (dup2(infile,STDIN_FILENO) == -1)
-		return (1);
-	close(infile);
-	while (argv[i])
+	i = 2;
+	infile = open_fd(cmd[1], 0);
+	outfile = open_fd(cmd[argc - 1], 1);
+	if (!outfile)
 	{
-		if (!check_acces(argv[i], path))
-			write(2, "ACCES KO\n", 9);
-		i++;
+		close(infile);
+		exit(EXIT_FAILURE);
 	}
-	check_open(argv[i - 1]);
-	return (0);
+	dup2(infile,STDIN_FILENO);
+	while (i < argc - 2)
+		pipe_time(cmd[i++], path);
+	dup2(outfile,STDOUT_FILENO);
+	exec(cmd[i], path);
+	close(infile);
+	close(outfile);
 }

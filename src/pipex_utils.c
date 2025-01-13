@@ -6,7 +6,7 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 10:47:37 by agraille          #+#    #+#             */
-/*   Updated: 2025/01/13 11:18:25 by agraille         ###   ########.fr       */
+/*   Updated: 2025/01/13 15:26:35 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,4 +27,24 @@ void	exit_time(int fd, char **path)
 	ft_free(path);
 	close(fd);
 	exit(EXIT_FAILURE);
+}
+
+char	**path_split(char **envp)
+{
+	size_t	i;
+	char	**path;
+
+	i = 0;
+	path = NULL;
+	while (envp[i])
+	{
+		if (ft_strnstr(envp[i], "PATH=", 5))
+		{
+			path = ft_split(envp[i], ':');
+			break ;
+		}
+		++i;
+	}
+	ft_memmove(path[0], path[0] + 5, ft_strlen(path[0]) - 4);
+	return (path);
 }

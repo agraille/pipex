@@ -6,13 +6,13 @@
 #    By: agraille <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/16 10:58:27 by agraille          #+#    #+#              #
-#    Updated: 2025/01/13 12:45:05 by agraille         ###   ########.fr        #
+#    Updated: 2025/01/13 23:11:31 by agraille         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = pipex
 CC=cc
-CFLAGS=-Wall -Wextra -Werror -g3
+CFLAGS=-Wall -Wextra -Werror
 SRC = src/main.c src/pipex.c src/pipex_utils.c src/exec.c
 OBJ_DIR = obj
 OBJ	= $(addprefix $(OBJ_DIR)/,$(SRC:%.c=%.o))

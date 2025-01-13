@@ -6,7 +6,7 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 09:33:00 by agraille          #+#    #+#             */
-/*   Updated: 2025/01/13 15:55:27 by agraille         ###   ########.fr       */
+/*   Updated: 2025/01/14 00:02:59 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,58 @@ static char	*check_acces(char *cmd, char **path)
 	return (NULL);
 }
 
+static void	quotes(char **result, char **cmd, t_parse *p)
+{
+	if ((**cmd == '\'' || **cmd == '\"') && !p->in_quotes)
+	{
+		p->quote_char = **cmd;
+		p->in_quotes = 1;
+		p->start = *cmd + 1;
+	}
+	else if (**cmd == p->quote_char && p->in_quotes)
+	{
+		result[p->i] = ft_substr(p->start, 0, *cmd - p->start);
+		p->i++;
+		p->in_quotes = 0;
+		p->quote_char = 0;
+		p->start = *cmd + 1;
+	}
+}
+
+static char	**parse_cmd_with_quotes(char *cmd)
+{
+	char	**result;
+	t_parse	p;
+
+	result = malloc(sizeof(char *) * (ft_strlen(cmd) + 1));
+	parce_init(&p);
+	p.start = cmd;
+	while (*cmd)
+	{
+		quotes(result, &cmd, &p);
+		if (*cmd == ' ' && !p.in_quotes)
+		{
+			if (cmd > p.start)
+				result[p.i++] = ft_substr(p.start, 0, cmd - p.start);
+			while (*cmd == ' ')
+				cmd++;
+			p.start = cmd;
+			continue ;
+		}
+		cmd++;
+	}
+	if (cmd > p.start)
+		result[p.i++] = ft_substr(p.start, 0, cmd - p.start);
+	result[p.i] = NULL;
+	return (result);
+}
+
 void	exec(char *cmd, char **env)
 {
 	char	**s_cmd;
 	char	*path;
 
-	s_cmd = ft_split(cmd, ' ');
+	s_cmd = parse_cmd_with_quotes(cmd);
 	if (!s_cmd)
 		exit(EXIT_FAILURE);
 	path = check_acces(s_cmd[0], env);

@@ -6,7 +6,7 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 10:47:37 by agraille          #+#    #+#             */
-/*   Updated: 2025/01/13 15:26:35 by agraille         ###   ########.fr       */
+/*   Updated: 2025/01/14 00:02:44 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,4 +47,11 @@ char	**path_split(char **envp)
 	}
 	ft_memmove(path[0], path[0] + 5, ft_strlen(path[0]) - 4);
 	return (path);
+}
+
+void	parce_init(t_parse *p)
+{
+	p->i = 0;
+	p->in_quotes = 0;
+	p->quote_char = 0;
 }

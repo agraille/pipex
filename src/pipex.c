@@ -6,7 +6,7 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 09:13:05 by agraille          #+#    #+#             */
-/*   Updated: 2025/01/13 15:56:25 by agraille         ###   ########.fr       */
+/*   Updated: 2025/01/13 23:12:39 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ static void	here_doc(char **cmd, char **path, int outfile)
 	}
 	else
 	{
-		close(outfile);
 		close(p_fd[1]);
 		dup2(p_fd[0], STDIN_FILENO);
 		close(p_fd[0]);
@@ -99,12 +98,12 @@ void	run_pipex(char **cmd, char **path, int argc, int i)
 			dup2(infile, STDIN_FILENO);
 		if (infile == -1)
 			i++;
+		outfile = open_fd(cmd[argc - 1], 1);
+		if (outfile == -1)
+			exit_time(infile, path);
 		close(infile);
 	}
 	while (i < argc - 2)
 		pipe_time(cmd[i++], path, outfile);
-	outfile = open_fd(cmd[argc - 1], 1);
-		if(outfile == -1)
-			exit_time(infile, path);
 	to_outfile(outfile, cmd[i], path);
 }

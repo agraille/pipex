@@ -6,13 +6,11 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 09:13:05 by agraille          #+#    #+#             */
-/*   Updated: 2025/01/12 23:20:36 by agraille         ###   ########.fr       */
+/*   Updated: 2025/01/13 11:20:19 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
-#include <string.h>
-
 
 char	**path_split(char **envp)
 {
@@ -70,41 +68,31 @@ char	*check_acces(char *cmd, char **path)
 	return (NULL);
 }
 
-void	run_pipex(char **cmd, char **path, int argc)
+void	run_pipex(char **cmd, char **path, int argc, int i)
 {
-	int	i;
 	int	infile;
 	int	outfile;
 
-	if (strcmp(cmd[1], "here_doc") == 0)
+	if (i == 3)
 	{
-		// if (argc < 6)
-		// 	exit(EXIT_FAILURE);
-		i = 3;
 		outfile = open_fd(cmd[argc - 1], 2);
-		here_doc(cmd);
+		here_doc(cmd, path, outfile);
 	}
 	else
 	{
-		i = 2;
 		infile = open_fd(cmd[1], 0);
 		if (infile == -1)
 		{
-			ft_putendl_fd("Invalid infile\n", 2);
-			ft_free(path);
-			exit(EXIT_FAILURE);
-		}
-		outfile = open_fd(cmd[argc - 1], 1);
-		if (outfile == -1)
-		{
-			ft_free(path);
-			close(infile);
-			exit(EXIT_FAILURE);
+			outfile = open_fd(cmd[argc - 1], 1);
+			exit_time(outfile, path);
 		}
 		dup2(infile, STDIN_FILENO);
 		close(infile);
 	}
 	while (i < argc - 2)
 		pipe_time(cmd[i++], path, outfile);
+	outfile = open_fd(cmd[argc - 1], 1);
+		if (outfile == -1)
+			exit_time(infile, path);
 	to_outfile(outfile, cmd[i], path);
 }

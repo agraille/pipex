@@ -6,7 +6,7 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 09:33:00 by agraille          #+#    #+#             */
-/*   Updated: 2025/01/12 23:19:04 by agraille         ###   ########.fr       */
+/*   Updated: 2025/01/13 11:27:04 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	here_in(char **cmd, int *p_fd)
 	}
 }
 
-void	here_doc(char **cmd)
+void	here_doc(char **cmd, char **path, int outfile)
 {
 	int		p_fd[2];
 	pid_t	pid;
@@ -41,11 +41,19 @@ void	here_doc(char **cmd)
 	if (pid == -1)
 		exit(0);
 	if (pid == 0)
+	{
+		close(p_fd[0]);
+		close(outfile);
+		ft_free(path);
 		here_in(cmd, p_fd);
+		close(p_fd[1]);
+	}
 	else
 	{
+		close(outfile);
 		close(p_fd[1]);
-		dup2(p_fd[0], 0);
+		dup2(p_fd[0], STDIN_FILENO);
+		close(p_fd[0]);
 		waitpid(pid, NULL, 0);
 	}
 }
@@ -64,10 +72,7 @@ void	exec(char *cmd, char **env, int outfile)
 		ft_putstr_fd("pipex: command not found: ", 2);
 		ft_putendl_fd(s_cmd[0], 2);
 		ft_free(s_cmd);
-		free(path);
-		ft_free(env);
-		close(outfile);
-		exit(EXIT_FAILURE);
+		exit_time(outfile, env);
 	}
 	execve(path, s_cmd, env);
 }
@@ -80,29 +85,22 @@ void	to_outfile(int outfile, char *cmd, char **path)
 	close(outfile);
 	last_pid = fork();
 	if (last_pid == 0)
-	{
 		exec(cmd, path, outfile);
-	}	
 	waitpid(last_pid, NULL, 0);
 }
 
-int	pipe_time(char *cmd, char **path, int outfile)
+void	pipe_time(char *cmd, char **path, int outfile)
 {
 	int	pid;
 	int	p_fd[2];
 
 	if (pipe(p_fd) == -1)
-	{
-		perror("PIPE");
-		return (-1);
-	}
+		exit_time(outfile, path);
 	pid = fork();
 	if (pid == -1)
 	{
 		close(p_fd[0]);
-		close(p_fd[1]);
-		perror("FORK");
-		return (-1);
+		exit_time(p_fd[1], path);
 	}
 	if (pid == 0)
 	{
@@ -118,5 +116,4 @@ int	pipe_time(char *cmd, char **path, int outfile)
 		close(p_fd[0]);
 		waitpid(pid, NULL, 0);
 	}
-	return (1);
 }

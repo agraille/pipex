@@ -6,7 +6,7 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 10:47:37 by agraille          #+#    #+#             */
-/*   Updated: 2025/01/09 10:39:37 by agraille         ###   ########.fr       */
+/*   Updated: 2025/01/13 11:18:25 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,4 +20,11 @@ void	ft_free(char **path)
 	while (path[++i])
 		free(path[i]);
 	free(path);
+}
+
+void	exit_time(int fd, char **path)
+{
+	ft_free(path);
+	close(fd);
+	exit(EXIT_FAILURE);
 }

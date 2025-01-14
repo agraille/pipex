@@ -6,16 +6,19 @@
 #    By: agraille <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/16 10:58:27 by agraille          #+#    #+#              #
-#    Updated: 2025/01/13 23:11:31 by agraille         ###   ########.fr        #
+#    Updated: 2025/01/14 11:20:34 by agraille         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = pipex
+BONUS_NAME=pipex_bonus
 CC=cc
 CFLAGS=-Wall -Wextra -Werror
 SRC = src/main.c src/pipex.c src/pipex_utils.c src/exec.c
+BONUS_SRC = src_bonus/main_bonus.c src_bonus/pipex_bonus.c src_bonus/pipex_utils_bonus.c src_bonus/exec_bonus.c
 OBJ_DIR = obj
 OBJ	= $(addprefix $(OBJ_DIR)/,$(SRC:%.c=%.o))
+BONUS_OBJ = $(addprefix $(OBJ_DIR)/,$(BONUS_SRC:%.c=%.o))
 
 LIBFT_DIR = ./libft
 LIBFT_A = $(LIBFT_DIR)/libft.a
@@ -43,6 +46,14 @@ $(NAME): $(OBJ) $(LIBFT_A) $(PRINTF_A)
 	@echo "$(GREEN)║   Compilation Succes! ✅  ║$(RESET)"
 	@echo "$(GREEN)╚═══════════════════════════╝$(RESET)"
 
+bonus: $(BONUS_NAME)
+
+$(BONUS_NAME): $(BONUS_OBJ) $(LIBFT_A) $(PRINTF_A)
+	$(CC) $(CFLAGS) $(BONUS_OBJ) $(LIBFT_FLAGS) $(PRINTF_FLAGS) -o $(BONUS_NAME)
+	@echo "$(GREEN)╔═════════════════════════════════╗$(RESET)"
+	@echo "$(GREEN)║   Compilation Bonus Succes! ✅  ║$(RESET)"
+	@echo "$(GREEN)╚═════════════════════════════════╝$(RESET)"
+
 $(LIBFT_A): $(LIBFT_SRC) $(LIBFT_HEADERS)
 	$(MAKE) -C $(LIBFT_DIR)
 
@@ -55,7 +66,7 @@ $(OBJ_DIR)/%.o: %.c Makefile ./include/pipex.h
 
 
 clean :
-	@rm -rf $(OBJ) $(OBJ_DIR)/
+	@rm -rf $(OBJ) $(BONUS_OBJ) $(OBJ_DIR)/
 	@$(MAKE) clean -C $(LIBFT_DIR)
 	@$(MAKE) clean -C $(PRINTF_DIR)
 	@echo "$(GREEN)╔═══════════════════════════╗$(RESET)"
@@ -65,7 +76,7 @@ clean :
 fclean :
 	@$(MAKE) fclean -C $(LIBFT_DIR)
 	@$(MAKE) fclean -C $(PRINTF_DIR)
-	@rm -rf $(NAME) $(OBJ) $(OBJ_DIR)
+	@rm -rf $(NAME) $(OBJ) $(OBJ_DIR) $(BONUS_NAME) $(BONUS_OBJ)
 	@echo "$(GREEN)╔═══════════════════════════╗$(RESET)"
 	@echo "$(GREEN)║        Fclean OK! 🪣       ║$(RESET)"
 	@echo "$(GREEN)╚═══════════════════════════╝$(RESET)"

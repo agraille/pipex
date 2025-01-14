@@ -1,10 +1,1 @@
-total 52
--rw-rw-r--  1 lyricall lyricall  3052 Jan 13 23:11 Makefile
-drwxrwxr-x  2 lyricall lyricall  4096 Jan 13 21:49 include
--rw-rw-r--  1 lyricall lyricall    65 Jan 13 23:49 infile
-drwxrwxr-x 14 lyricall lyricall  4096 Jan 13 22:10 libft
-drwxrwxr-x  3 lyricall lyricall  4096 Jan 13 22:10 obj
--rwxrwxr-x  1 lyricall lyricall     0 Jan 14 00:04 outfile
--rwxrwxr-x  1 lyricall lyricall 22360 Jan 14 00:03 pipex
-drwxrwxr-x  5 lyricall lyricall  4096 Jan 13 22:10 printf
-drwxrwxr-x  2 lyricall lyricall  4096 Jan 13 22:10 src
+cat

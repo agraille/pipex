@@ -17,17 +17,12 @@ int	main(int argc, char **argv, char **envp)
 	char	**path;
 	int		i;
 
-	if (ft_strncmp(argv[1], "here_doc", 8) == 0 && argc < 6)
-	{
-		ft_putendl_fd("Example: ./pipex here_doc EOF cmd1 cmd2 file2\n", 2);
-		exit(EXIT_FAILURE);
-	}
-	else if (argc < 5)
+	if (argc < 5)
 	{
 		ft_putendl_fd("Example: ./pipex file1 cmd1 cmd2 file2\n", 2);
 		exit(EXIT_FAILURE);
 	}
-	if (ft_strncmp(argv[1], "here_doc", 8) == 0)
+	if (ft_strncmp(argv[1], "here_doc", 8) == 0 && argc >= 6)
 		i = 3;
 	else
 		i = 2;

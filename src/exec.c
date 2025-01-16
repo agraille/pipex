@@ -6,7 +6,7 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 09:33:00 by agraille          #+#    #+#             */
-/*   Updated: 2025/01/14 08:57:26 by agraille         ###   ########.fr       */
+/*   Updated: 2025/01/16 06:57:12 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,5 @@ void	pipe_time(char *cmd, char **path, int outfile)
 		close(p_fd[1]);
 		dup2(p_fd[0], STDIN_FILENO);
 		close(p_fd[0]);
-		waitpid(pid, NULL, 0);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 09:13:05 by agraille          #+#    #+#             */
-/*   Updated: 2025/01/14 11:34:43 by agraille         ###   ########.fr       */
+/*   Updated: 2025/01/16 06:57:07 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,4 +63,5 @@ void	run_pipex(char **cmd, char **path, int argc, int i)
 	while (i < argc - 2)
 		pipe_time(cmd[i++], path, outfile);
 	to_outfile(outfile, cmd[i], path);
+	waitpid(0, NULL, 0);
 }

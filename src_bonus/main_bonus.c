@@ -6,7 +6,7 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 08:14:58 by agraille          #+#    #+#             */
-/*   Updated: 2025/01/16 06:07:29 by agraille         ###   ########.fr       */
+/*   Updated: 2025/01/19 10:58:59 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ int	main(int argc, char **argv, char **envp)
 		ft_putendl_fd("Example: ./pipex file1 cmd1 cmd2 file2", 2);
 		exit(EXIT_FAILURE);
 	}
-	if (ft_strncmp(argv[1], "here_doc", 8) == 0 && argc >= 6)
+	if (ft_strncmp(argv[1], "here_doc", 8) == 0 && argc >= 6 &&
+			(int)ft_strlen(argv[1]) == 8)
 		i = 3;
 	else
 		i = 2;

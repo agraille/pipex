@@ -6,7 +6,7 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 09:33:00 by agraille          #+#    #+#             */
-/*   Updated: 2025/01/16 06:57:12 by agraille         ###   ########.fr       */
+/*   Updated: 2025/01/19 17:55:10 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,9 +99,10 @@ void	exec(char *cmd, char **env)
 		exit(EXIT_FAILURE);
 	}
 	execve(path, s_cmd, env);
+	exit(1);
 }
 
-void	pipe_time(char *cmd, char **path, int outfile)
+void	pipe_time(char *cmd, char **path, int outfile, t_pid *s)
 {
 	pid_t	pid;
 	int		p_fd[2];
@@ -118,11 +119,14 @@ void	pipe_time(char *cmd, char **path, int outfile)
 		dup2(p_fd[1], STDOUT_FILENO);
 		close(p_fd[1]);
 		exec(cmd, path);
+		exit(1);
 	}
 	else
 	{
 		close(p_fd[1]);
 		dup2(p_fd[0], STDIN_FILENO);
 		close(p_fd[0]);
+		s->tab[s->index] = pid;
+		s->index++;
 	}
 }

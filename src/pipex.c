@@ -6,13 +6,13 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 09:13:05 by agraille          #+#    #+#             */
-/*   Updated: 2025/01/16 06:57:07 by agraille         ###   ########.fr       */
+/*   Updated: 2025/01/19 17:57:52 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
 
-static void	to_outfile(int outfile, char *cmd, char **path)
+static void	to_outfile(int outfile, char *cmd, char **path, t_pid *s)
 {
 	int	last_pid;
 
@@ -20,8 +20,15 @@ static void	to_outfile(int outfile, char *cmd, char **path)
 	close(outfile);
 	last_pid = fork();
 	if (last_pid == 0)
+	{
 		exec(cmd, path);
-	waitpid(last_pid, NULL, 0);
+		exit(1);
+	}
+	else
+	{
+		s->tab[s->index] = last_pid;
+		s->index++;
+	}
 }
 
 static int	open_fd(char *cmd, int in_out)
@@ -44,7 +51,7 @@ static int	open_fd(char *cmd, int in_out)
 	return (fd);
 }
 
-void	run_pipex(char **cmd, char **path, int argc, int i)
+void	run_pipex(char **cmd, char **path, int argc, t_pid *s)
 {
 	int	infile;
 	int	outfile;
@@ -56,12 +63,11 @@ void	run_pipex(char **cmd, char **path, int argc, int i)
 		close(infile);
 	}
 	if (infile == -1)
-		i++;
+		s->i++;
 	outfile = open_fd(cmd[argc - 1], 1);
 	if (outfile == -1)
 		exit_time(infile, path);
-	while (i < argc - 2)
-		pipe_time(cmd[i++], path, outfile);
-	to_outfile(outfile, cmd[i], path);
-	waitpid(0, NULL, 0);
+	while (s->i < argc - 2)
+		pipe_time(cmd[s->i++], path, outfile, s);
+	to_outfile(outfile, cmd[s->i], path, s);
 }

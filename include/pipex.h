@@ -6,7 +6,7 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 08:15:48 by agraille          #+#    #+#             */
-/*   Updated: 2025/01/14 11:21:13 by agraille         ###   ########.fr       */
+/*   Updated: 2025/01/19 17:49:46 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,17 @@ typedef struct s_parse
 	char	*start;
 }	t_parse;
 
+typedef struct s_pid
+{
+	int		i;
+	int		index;
+	int		tab[1024];
+}	t_pid;
+
 char	**path_split(char **envp);
 void	ft_free(char **path);
-void	run_pipex(char **argv, char **path, int argc, int i);
-void	pipe_time(char *check, char **way, int outfile);
+void	run_pipex(char **argv, char **path, int argc, t_pid *s);
+void	pipe_time(char *check, char **way, int outfile, t_pid *s);
 void	exec(char *cmd, char **env);
 void	exit_time(int fd, char **path);
 void	parce_init(t_parse *p);

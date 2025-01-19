@@ -6,7 +6,7 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 08:15:48 by agraille          #+#    #+#             */
-/*   Updated: 2025/01/19 17:49:46 by agraille         ###   ########.fr       */
+/*   Updated: 2025/01/19 18:06:59 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	ft_free(char **path);
 void	run_pipex(char **argv, char **path, int argc, t_pid *s);
 void	pipe_time(char *check, char **way, int outfile, t_pid *s);
 void	exec(char *cmd, char **env);
-void	exit_time(int fd, char **path);
+void	exit_time(int fd, char **path, t_pid *s);
 void	parce_init(t_parse *p);
 
 #endif

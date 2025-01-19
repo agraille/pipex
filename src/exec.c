@@ -6,7 +6,7 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 09:33:00 by agraille          #+#    #+#             */
-/*   Updated: 2025/01/19 17:55:10 by agraille         ###   ########.fr       */
+/*   Updated: 2025/01/19 18:07:53 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,10 +108,10 @@ void	pipe_time(char *cmd, char **path, int outfile, t_pid *s)
 	int		p_fd[2];
 
 	if (pipe(p_fd) == -1)
-		exit_time(outfile, path);
+		exit_time(outfile, path, s);
 	pid = fork();
 	if (pid == -1)
-		return (close(p_fd[0]), exit_time(p_fd[1], path));
+		return (close(p_fd[0]), exit_time(p_fd[1], path, s));
 	if (pid == 0)
 	{
 		close(outfile);

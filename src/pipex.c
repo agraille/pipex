@@ -6,7 +6,7 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 09:13:05 by agraille          #+#    #+#             */
-/*   Updated: 2025/01/19 17:57:52 by agraille         ###   ########.fr       */
+/*   Updated: 2025/01/19 18:07:57 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	run_pipex(char **cmd, char **path, int argc, t_pid *s)
 		s->i++;
 	outfile = open_fd(cmd[argc - 1], 1);
 	if (outfile == -1)
-		exit_time(infile, path);
+		exit_time(infile, path, s);
 	while (s->i < argc - 2)
 		pipe_time(cmd[s->i++], path, outfile, s);
 	to_outfile(outfile, cmd[s->i], path, s);

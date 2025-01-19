@@ -6,7 +6,7 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 10:47:37 by agraille          #+#    #+#             */
-/*   Updated: 2025/01/19 17:41:38 by agraille         ###   ########.fr       */
+/*   Updated: 2025/01/19 18:11:51 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,10 @@ void	ft_free(char **path)
 	free(path);
 }
 
-void	exit_time(int fd, char **path)
+void	exit_time(int fd, char **path, t_pid *s)
 {
 	ft_free(path);
+	free(s);
 	close(fd);
 	exit(EXIT_FAILURE);
 }

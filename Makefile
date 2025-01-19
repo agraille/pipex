@@ -6,14 +6,14 @@
 #    By: agraille <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/16 10:58:27 by agraille          #+#    #+#              #
-#    Updated: 2025/01/14 11:20:34 by agraille         ###   ########.fr        #
+#    Updated: 2025/01/19 21:40:24 by agraille         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = pipex
 BONUS_NAME=pipex_bonus
 CC=cc
-CFLAGS=-Wall -Wextra -Werror
+CFLAGS=-Wall -Wextra -Werror -g3
 SRC = src/main.c src/pipex.c src/pipex_utils.c src/exec.c
 BONUS_SRC = src_bonus/main_bonus.c src_bonus/pipex_bonus.c src_bonus/pipex_utils_bonus.c src_bonus/exec_bonus.c
 OBJ_DIR = obj

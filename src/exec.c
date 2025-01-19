@@ -6,7 +6,7 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 09:33:00 by agraille          #+#    #+#             */
-/*   Updated: 2025/01/19 18:07:53 by agraille         ###   ########.fr       */
+/*   Updated: 2025/01/19 21:52:12 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,10 @@ static void	quotes(char **result, char **cmd, t_parse *p)
 	}
 }
 
-static char	**parse_cmd_with_quotes(char *cmd)
+static char	**parse_cmd_with_quotes(char *cmd, char	**result)
 {
-	char	**result;
 	t_parse	p;
 
-	result = malloc(sizeof(char *) * (ft_strlen(cmd) + 1));
 	parce_init(&p);
 	p.start = cmd;
 	while (*cmd)
@@ -81,14 +79,19 @@ static char	**parse_cmd_with_quotes(char *cmd)
 	return (result);
 }
 
-void	exec(char *cmd, char **env)
+void	exec(char *cmd, char **env, t_pid *s)
 {
 	char	**s_cmd;
 	char	*path;
 
-	s_cmd = parse_cmd_with_quotes(cmd);
+	s_cmd = malloc(sizeof(char *) * (ft_strlen(cmd) + 1));
 	if (!s_cmd)
+	{
+		free(s);
+		ft_free(env);
 		exit(EXIT_FAILURE);
+	}
+	s_cmd = parse_cmd_with_quotes(cmd, s_cmd);
 	path = check_acces(s_cmd[0], env);
 	if (!path)
 	{
@@ -118,7 +121,7 @@ void	pipe_time(char *cmd, char **path, int outfile, t_pid *s)
 		close(p_fd[0]);
 		dup2(p_fd[1], STDOUT_FILENO);
 		close(p_fd[1]);
-		exec(cmd, path);
+		exec(cmd, path, s);
 		exit(1);
 	}
 	else

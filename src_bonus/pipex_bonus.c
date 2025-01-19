@@ -6,7 +6,7 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 09:13:05 by agraille          #+#    #+#             */
-/*   Updated: 2025/01/19 18:06:39 by agraille         ###   ########.fr       */
+/*   Updated: 2025/01/19 21:49:52 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static void	here_in(char **cmd, int *p_fd)
 	}
 }
 
-static void	here_doc(char **cmd, char **path, int outfile)
+static void	here_doc(char **cmd, char **path, int outfile, t_pid *s)
 {
 	int		p_fd[2];
 	pid_t	pid;
@@ -52,7 +52,8 @@ static void	here_doc(char **cmd, char **path, int outfile)
 		close(p_fd[1]);
 		dup2(p_fd[0], STDIN_FILENO);
 		close(p_fd[0]);
-		waitpid(pid, NULL, 0);
+		s->tab[s->index] = pid;
+		s->index++;
 	}
 }
 
@@ -65,7 +66,7 @@ static void	to_outfile(int outfile, char *cmd, char **path, t_pid *s)
 	last_pid = fork();
 	if (last_pid == 0)
 	{
-		exec(cmd, path);
+		exec(cmd, path, s);
 		exit(1);
 	}
 	else
@@ -109,7 +110,7 @@ void	run_pipex(char **cmd, char **path, int argc, t_pid *s)
 	if (s->i == 3)
 	{
 		outfile = open_fd(cmd[argc - 1], 2);
-		here_doc(cmd, path, outfile);
+		here_doc(cmd, path, outfile, s);
 	}
 	else
 	{
@@ -120,7 +121,7 @@ void	run_pipex(char **cmd, char **path, int argc, t_pid *s)
 			close(infile);
 		}
 		if (infile == -1)
-			s->i++;
+			cmd[s->i] = NULL;
 		outfile = open_fd(cmd[argc - 1], 1);
 		if (outfile == -1)
 			exit_time(infile, path, s);

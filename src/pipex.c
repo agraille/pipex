@@ -6,7 +6,7 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 09:13:05 by agraille          #+#    #+#             */
-/*   Updated: 2025/01/19 18:07:57 by agraille         ###   ########.fr       */
+/*   Updated: 2025/01/19 21:49:58 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void	to_outfile(int outfile, char *cmd, char **path, t_pid *s)
 	last_pid = fork();
 	if (last_pid == 0)
 	{
-		exec(cmd, path);
+		exec(cmd, path, s);
 		exit(1);
 	}
 	else
@@ -63,7 +63,7 @@ void	run_pipex(char **cmd, char **path, int argc, t_pid *s)
 		close(infile);
 	}
 	if (infile == -1)
-		s->i++;
+		cmd[s->i] = NULL;
 	outfile = open_fd(cmd[argc - 1], 1);
 	if (outfile == -1)
 		exit_time(infile, path, s);

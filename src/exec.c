@@ -97,6 +97,7 @@ void	exec(char *cmd, char **env, t_pid *s)
 	{
 		ft_putstr_fd("Command not found: ", 2);
 		ft_putendl_fd(s_cmd[0], 2);
+		free(s);
 		ft_free(s_cmd);
 		ft_free(env);
 		exit(EXIT_FAILURE);
